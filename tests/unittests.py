@@ -1,10 +1,23 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import os
+import os, sys
 import json
-from .. import utils
+# This should point to the directory containing the 'utils' module
+project_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_dir)
+
+import utils
 
 class TestGptChatAndExecuteFunctionBank(unittest.TestCase):
+    """
+    A class for testing the `gpt_chat_and_execute_function_bank` function.
+
+    Methods:
+    --------
+    test_gpt_chat_and_execute_function_bank_no_function_call: Test case where the function call is not present in the response.
+    test_gpt_chat_and_execute_function_bank_with_function_call: Test case where the function call is present in the response.
+    test_gpt_chat_and_execute_function_bank_api_error: Test case where the API returns an error.
+    """
     @patch('requests.post')
     def test_gpt_chat_and_execute_function_bank_no_function_call(self, mock_post):
         # Mock the API response
