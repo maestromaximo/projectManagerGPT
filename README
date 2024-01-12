@@ -14,6 +14,11 @@ AI-Driven Project Management Tool is a Python-based application designed to assi
 - Python 3.x
 
 
+#### Test
+
+- To run the test run ```python -m unittest tests.unittests```
+
+
 
 ### License
 - This project is licensed under the MIT License.

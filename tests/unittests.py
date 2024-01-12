@@ -75,5 +75,41 @@ class TestGptChatAndExecuteFunctionBank(unittest.TestCase):
         self.assertEqual(response, None)
         self.assertEqual(len(context), 1)
 
+import unittest
+from unittest.mock import patch, Mock
+from main import edit_tasks
+
+class TestEditTasks(unittest.TestCase):
+    @patch('builtins.input', side_effect=['Task 1', 'New description'])
+    def test_edit_tasks(self, input_mock):
+        # Mock project and task
+        task = Mock()
+        task.title = 'Task 1'
+        project = Mock()
+        project.get_tasks.return_value = [task]
+
+        # Call the function
+        edit_tasks(project)
+
+        # Check if the function called the methods correctly
+        project.get_tasks.assert_called_once()
+        task.add_description.assert_called_once_with('New description')
+
+    @patch('builtins.input', side_effect=['Nonexistent Task', 'New description'])
+    def test_edit_tasks_not_found(self, input_mock):
+        # Mock project and task
+        task = Mock()
+        task.title = 'Task 1'
+        project = Mock()
+        project.get_tasks.return_value = [task]
+
+        # Call the function
+        edit_tasks(project)
+
+        # Check if the function called the methods correctly
+        project.get_tasks.assert_called_once()
+        task.add_description.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main()
