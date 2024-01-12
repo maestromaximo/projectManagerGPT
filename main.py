@@ -88,3 +88,43 @@ class Objectives:
         for objective in self.objectives:
             objective_info += str(objective) + '\n'
         return objective_info
+    
+class Technology:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+        
+    def add_description(self, description):
+        self.description = description
+    
+    def __str__(self):
+        return f'Technology: {self.name}, Description: {self.description}'
+    
+## Classes end here
+    
+
+## Functions start here
+    
+
+
+
+
+
+
+
+
+def main():
+    print('Welcome to the Project Manager')
+    print('What would you like to do?')
+    print('1. Create a new project')
+    print('2. View existing projects')
+    print('3. Exit')
+    choice = input('Enter your choice: ')
+    if choice == '1':
+        create_project()
+    elif choice == '2':
+        view_projects()
+    elif choice == '3':
+        return None
+    
+    
