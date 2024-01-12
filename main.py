@@ -105,26 +105,123 @@ class Technology:
 
 ## Functions start here
     
+def add_task_to_project(project_manager):
+    project_name = input("\nEnter the name of the project to add a task: ")
+    project = next((p for p in project_manager.get_projects() if p.name == project_name), None)
+
+    if project is None:
+        print(f"No project found with the name '{project_name}'")
+        return
+
+    task_title = input("Enter task title: ")
+    task_description = input("Enter task description: ")
+    new_task = Task(task_title, task_description)
+    project.add_task(new_task)
+    print(f"Task added to project '{project_name}'.\n")
+
+def update_status(project_manager, item_type="task"):
+    project_name = input(f"\nEnter the name of the project to update a {item_type}: ")
+    project = next((p for p in project_manager.get_projects() if p.name == project_name), None)
+
+    if project is None:
+        print(f"No project found with the name '{project_name}'")
+        return
+
+    item_title = input(f"Enter the {item_type}'s title to update: ")
+    for item in getattr(project, item_type + 's'):
+        if item.title == item_title:
+            item.mark_completed() if item_type == "task" else item.mark_incomplete()
+            print(f"{item_type.capitalize()} '{item_title}' status updated.\n")
+            return
+
+    print(f"{item_type.capitalize()} with title '{item_title}' not found in project '{project_name}'.")
+
+def list_tasks_in_project(project_manager):
+    project_name = input("\nEnter the name of the project to list tasks: ")
+    project = next((p for p in project_manager.get_projects() if p.name == project_name), None)
+
+    if project is None:
+        print(f"No project found with the name '{project_name}'")
+        return
+
+    if not project.get_tasks():
+        print("No tasks found in this project.")
+        return
+
+    print("\nTasks in Project:")
+    for task in project.get_tasks():
+        print(task)
+
+def update_technology_description(project_manager):
+    project_name = input("\nEnter the name of the project to update technology: ")
+    project = next((p for p in project_manager.get_projects() if p.name == project_name), None)
+
+    if project is None:
+        print(f"No project found with the name '{project_name}'")
+        return
+
+    tech_name = input("Enter the name of the technology to update: ")
+    for tech in project.technologies:
+        if tech.name == tech_name:
+            new_description = input("Enter new description for the technology: ")
+            tech.add_description(new_description)
+            print(f"Technology '{tech_name}' description updated in project '{project_name}'.\n")
+            return
+
+    print(f"Technology '{tech_name}' not found in project '{project_name}'.")
+
+
+
+def view_projects(project_manager):
+    print("\n-- Existing Projects --")
+    if not project_manager.get_projects():
+        print("No projects found.")
+        return
+
+    for project in project_manager.get_projects():
+        print(project)
+
+
+def create_project(project_manager):
+    print("\n-- Create a New Project --")
+    name = input("Enter project name: ")
+    objectives = input("Enter project objectives (comma-separated): ").split(',')
+    technologies_input = input("Enter technologies used (comma-separated): ").split(',')
+
+    objectives_list = [Objective(name.strip(), "") for name in objectives]
+    tech_list = [Technology(name.strip(), "") for name in technologies_input]
+
+    new_project = Project(name, [], objectives_list, tech_list)
+    project_manager.add_project(new_project)
+    print(f"Project '{name}' created successfully!\n")
 
 
 
 
-
-
-
+#main function
 
 def main():
-    print('Welcome to the Project Manager')
-    print('What would you like to do?')
-    print('1. Create a new project')
-    print('2. View existing projects')
-    print('3. Exit')
-    choice = input('Enter your choice: ')
-    if choice == '1':
-        create_project()
-    elif choice == '2':
-        view_projects()
-    elif choice == '3':
-        return None
-    
-    
+    project_manager = ProjectManager()
+
+    while True:
+        print('\nWelcome to the Project Manager')
+        print('1. Create a new project')
+        print('2. View existing projects')
+        print('3. Exit')
+        choice = input('Enter your choice: ')
+
+        if choice == '1':
+            create_project(project_manager)
+        elif choice == '2':
+            view_projects(project_manager)
+        elif choice == '3':
+            print("Exiting Project Manager.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
+
+
