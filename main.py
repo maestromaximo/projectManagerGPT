@@ -181,6 +181,106 @@ def view_projects(project_manager):
     for project in project_manager.get_projects():
         print(project)
 
+    project_name = input("Enter the name of a project to view or edit (or press Enter to return): ")
+    if project_name:
+        project = next((p for p in project_manager.get_projects() if p.name == project_name), None)
+        if project is None:
+            print(f"No project found with the name '{project_name}'")
+        else:
+            view_or_edit_project(project)
+
+def view_or_edit_project(project):
+    while True:
+        print(f"\nProject: {project.name}")
+        print(project)
+        print('1. Edit this project')
+        print('2. Return to project list')
+        choice = input('Enter your choice: ')
+
+        if choice == '1':
+            edit_project(project)
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+def edit_project(project):
+    while True:
+        print(f"\nEditing Project: {project.name}")
+        print('1. Edit project name')
+        print('2. Edit objectives')
+        print('3. Edit technologies')
+        print('4. Add/Edit/Remove tasks')
+        print('5. Return to main menu')
+        choice = input('Enter your choice: ')
+
+        if choice == '1':
+            edit_project_name(project)
+        elif choice == '2':
+            edit_objectives(project)
+        elif choice == '3':
+            edit_technologies(project)
+        elif choice == '4':
+            edit_tasks(project)
+        elif choice == '5':
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
+def edit_project_name(project):
+    new_name = input("Enter new project name: ")
+    project.name = new_name
+    print(f"Project name updated to '{new_name}'.")
+
+def edit_objectives(project):
+    print("Current Objectives:")
+    for obj in project.objectives:
+        print(obj)
+
+    obj_name = input("Enter the name of the objective to edit: ")
+    objective = next((o for o in project.objectives if o.name == obj_name), None)
+
+    if objective is None:
+        print(f"Objective '{obj_name}' not found.")
+        return
+
+    new_description = input("Enter new description for the objective: ")
+    objective.add_description(new_description)
+    print(f"Objective '{obj_name}' updated.")
+
+def edit_technologies(project):
+    print("Current Technologies:")
+    for tech in project.technologies:
+        print(tech)
+
+    tech_name = input("Enter the name of the technology to edit: ")
+    technology = next((t for t in project.technologies if t.name == tech_name), None)
+
+    if technology is None:
+        print(f"Technology '{tech_name}' not found.")
+        return
+
+    new_description = input("Enter new description for the technology: ")
+    technology.add_description(new_description)
+    print(f"Technology '{tech_name}' updated.")
+
+def edit_tasks(project):
+    print("Current Tasks:")
+    for task in project.get_tasks():
+        print(task)
+
+    task_title = input("Enter the title of the task to edit: ")
+    task = next((t for t in project.get_tasks() if t.title == task_title), None)
+
+    if task is None:
+        print(f"Task '{task_title}' not found.")
+        return
+
+    new_description = input("Enter new description for the task: ")
+    task.add_description(new_description)
+    print(f"Task '{task_title}' updated.")
+
 
 def create_project(project_manager):
     print("\n-- Create a New Project --")
